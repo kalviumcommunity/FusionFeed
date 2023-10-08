@@ -101,6 +101,14 @@ def update_post(id):
     pass
 
 
+"""This Route is for deleting a single blog post by id"""
+
+
+@app.route('/post/<id>', methods=['DELETE'])
+def delete_post(id):
+    pass
+
+
 # debug
 if __name__ == '__main__':
     app.run(debug=True)
