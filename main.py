@@ -77,9 +77,12 @@ def create_post():
         return jsonify({'error': str(e)}), 500
 
 
-# @app.route('/posts', methods=['GET'])
-# def get_posts():
-#     pass
+"""This Route is for getting all blog posts"""
+
+
+@app.route('/posts', methods=['GET'])
+def get_posts():
+    pass
 
 
 # @app.route('/post/<id>', methods=['GET'])
