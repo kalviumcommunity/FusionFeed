@@ -13,6 +13,7 @@ client = MongoClient(MONGO)
 db = client.test
 collection = db["OOPs"]
 
+
 class Document:
     def __init__(self, name, email, password):
         self.name = name
@@ -20,11 +21,11 @@ class Document:
         self.password = password
         print(f"Document object created for {self.name}")
 
-
     def __del__(self):
         print(f"Document object destroyed for {self.name}")
 
-@app.route('/add', methods=['POST'])
+
+@app.route('/signup', methods=['POST'])
 def create_document():
     try:
         data = request.get_json()
@@ -37,14 +38,41 @@ def create_document():
 
         # Create an instance of the Document class
         new_doc = Document(name, email, password)
-        doc_data = {"name": new_doc.name, "email": new_doc.email, "password": new_doc.password}
-        
+        doc_data = {"name": new_doc.name,
+                    "email": new_doc.email, "password": new_doc.password}
+
         # Insert the document into the collection
         result = collection.insert_one(doc_data)
         return jsonify({'message': 'Document created', 'document_id': str(result.inserted_id)}), 201
-    
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+"""This Route is for creating a new blog post"""
+
+
+@app.route('/blog-post', methods=['POST'])
+def create_post():
+
+  
+
+
+# @app.route('/posts', methods=['GET'])
+# def get_posts():
+#     pass
+
+
+# @app.route('/post/<id>', methods=['GET'])
+# def get_post(id):
+#     pass
+
+
+# @app.route('/post/<id>', methods=['PUT'])
+# def update_post(id):
+#     pass
+
+
+# debug
 if __name__ == '__main__':
     app.run(debug=True)
