@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from auth import AuthValidation
 
 load_dotenv()
 
@@ -30,8 +31,9 @@ class BlogPost:
 # Create an array of blog posts
 blog_posts = []
 
-
 # Classes and Objects
+
+
 class Document:
 
     # Constructor
@@ -78,31 +80,28 @@ def create_document():
 
 @app.route('/blog-post', methods=['POST'])
 def create_post():
-
     try:
         data = request.get_json()
         email = request.headers.get('email')
         password = request.headers.get('password')
 
-        print(f" {email} {password} ")
         if not (email and password):
             return jsonify({'error': 'Missing email or password headers'}), 400
 
-        # Check if the email and password match with the ones stored in the database
-        doc_data = Auth.find_one({"email": email, "password": password})
+        # Use the static method to get the user's name
+        author_name = AuthValidation.Validate(email, password)
 
-        if not doc_data:
+        if not author_name:
             return jsonify({'error': 'Invalid email or password'}), 401
 
         title = data.get('title')
         content = data.get('content')
-        author = 'Balaji'
 
         if not (title and content):
             return jsonify({'error': 'Missing title or content'}), 400
 
         # Create a new blog post
-        new_post = BlogPost(title, content, author)
+        new_post = BlogPost(title, content, author_name)
 
         # Add the new post to the array of blog posts
         blog_posts.append(new_post)
