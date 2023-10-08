@@ -93,9 +93,12 @@ def get_post(id):
     pass
 
 
-# @app.route('/post/<id>', methods=['PUT'])
-# def update_post(id):
-#     pass
+"""This Route is for updating a single blog post by id"""
+
+
+@app.route('/post/<id>', methods=['PUT'])
+def update_post(id):
+    pass
 
 
 # debug
