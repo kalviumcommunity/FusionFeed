@@ -8,7 +8,6 @@ Auth = MongoClient(MONGO).test["OOPs"]
 class AuthValidation:
     @staticmethod
     def Validate(email, password):
-        print(f"Validating {email} and {password}")
         # Check if the email and password match with the ones stored in the database
         doc_data = Auth.find_one({"email": email, "password": password})
         if doc_data:
