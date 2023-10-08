@@ -11,7 +11,8 @@ app = Flask(__name__)
 MONGO = os.getenv('MONGO')
 client = MongoClient(MONGO)
 db = client.test
-collection = db["OOPs"]
+Auth = db["OOPs"]
+Blogs = db["Blog"]
 
 
 # Classes and Objects
@@ -49,7 +50,7 @@ def create_document():
                     "email": new_doc.email, "password": new_doc.password}
 
         # Insert the document into the collection
-        result = collection.insert_one(doc_data)
+        result = Auth.insert_one(doc_data)
         return jsonify({'message': 'Document created', 'document_id': str(result.inserted_id)}), 201
 
     except Exception as e:
@@ -71,12 +72,14 @@ def create_post():
             return jsonify({'error': 'Missing email or password headers'}), 400
 
         # Check if the email and password match with the ones stored in the database
-        doc_data = collection.find_one({"email": email, "password": password})
+        doc_data = Auth.find_one({"email": email, "password": password})
         if not doc_data:
             return jsonify({'error': 'Invalid email or password'}), 401
 
         # Create a new post
-        # ...
+
+        # Insert the post into the collection
+        result = Auth.insert_one(doc_data)
 
         return jsonify({'message': 'Post created'}), 201
 
