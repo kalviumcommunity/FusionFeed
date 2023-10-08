@@ -25,7 +25,7 @@ class Document:
         print(f"Document object destroyed for {self.name}")
 
 
-@app.route('/signup', methods=['POST'])
+@app.route('/add', methods=['POST'])
 def create_document():
     try:
         data = request.get_json()
@@ -44,34 +44,6 @@ def create_document():
         # Insert the document into the collection
         result = collection.insert_one(doc_data)
         return jsonify({'message': 'Document created', 'document_id': str(result.inserted_id)}), 201
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-"""This Route is for creating a new blog post"""
-
-
-@app.route('/blog-post', methods=['POST'])
-def create_post():
-
-    try:
-        data = request.get_json()
-        email = request.headers.get('email')
-        password = request.headers.get('password')
-
-        if not (email and password):
-            return jsonify({'error': 'Missing email or password headers'}), 400
-
-        # Check if the email and password match with the ones stored in the database
-        doc_data = collection.find_one({"email": email, "password": password})
-        if not doc_data:
-            return jsonify({'error': 'Invalid email or password'}), 401
-
-        # Create a new post
-        # ...
-
-        return jsonify({'message': 'Post created'}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
