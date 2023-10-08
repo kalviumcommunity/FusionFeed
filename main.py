@@ -14,15 +14,22 @@ db = client.test
 collection = db["OOPs"]
 
 
+# Classes and Objects
 class Document:
+
+    # Constructor
     def __init__(self, name, email, password):
         self.name = name
         self.email = email
         self.password = password
         print(f"Document object created for {self.name}")
 
+    # Destructor
     def __del__(self):
         print(f"Document object destroyed for {self.name}")
+
+
+"""This Route is for creating a new user"""
 
 
 @app.route('/signup', methods=['POST'])
