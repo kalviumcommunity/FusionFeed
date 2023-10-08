@@ -14,6 +14,22 @@ db = client.test
 Auth = db["OOPs"]
 Blogs = db["Blog"]
 
+# Class for representing a blog post
+
+
+class BlogPost:
+    def __init__(self, title, content, author):
+        self.title = title
+        self.content = content
+        self.author = author
+
+    def to_dict(self):
+        return {"title": self.title, "content": self.content, "author": self.author}
+
+
+# Create an array of blog posts
+blog_posts = []
+
 
 # Classes and Objects
 class Document:
@@ -68,18 +84,28 @@ def create_post():
         email = request.headers.get('email')
         password = request.headers.get('password')
 
+        print(f" {email} {password} ")
         if not (email and password):
             return jsonify({'error': 'Missing email or password headers'}), 400
 
         # Check if the email and password match with the ones stored in the database
         doc_data = Auth.find_one({"email": email, "password": password})
+
         if not doc_data:
             return jsonify({'error': 'Invalid email or password'}), 401
 
-        # Create a new post
+        title = data.get('title')
+        content = data.get('content')
+        author = 'Balaji'
 
-        # Insert the post into the collection
-        result = Auth.insert_one(doc_data)
+        if not (title and content):
+            return jsonify({'error': 'Missing title or content'}), 400
+
+        # Create a new blog post
+        new_post = BlogPost(title, content, author)
+
+        # Add the new post to the array of blog posts
+        blog_posts.append(new_post)
 
         return jsonify({'message': 'Post created'}), 201
 
