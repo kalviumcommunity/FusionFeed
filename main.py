@@ -85,9 +85,12 @@ def get_posts():
     pass
 
 
-# @app.route('/post/<id>', methods=['GET'])
-# def get_post(id):
-#     pass
+"""This Route is for getting a single blog post by id"""
+
+
+@app.route('/post/<id>', methods=['GET'])
+def get_post(id):
+    pass
 
 
 # @app.route('/post/<id>', methods=['PUT'])
