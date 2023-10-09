@@ -4,6 +4,8 @@ from pymongo import MongoClient
 MONGO = os.getenv('MONGO')
 Auth = MongoClient(MONGO).test["OOPs"]
 
+# static Validation class for validating the user
+
 
 class AuthValidation:
     @staticmethod
