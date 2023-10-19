@@ -37,6 +37,6 @@ class UserAuthenticator(User):
 
 class UserNameGetter(ABC):
     @staticmethod
-    def validate(email, password):
+    def Validate(email, password):
         user = UserAuthenticator.find_user(email, password)
-        return user.get_user_name() if user else None
+        return user.get_user_name() if user else False
