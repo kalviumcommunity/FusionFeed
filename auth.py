@@ -27,7 +27,7 @@ class UserAuthenticator(User):
                                      doc_data['email'], doc_data['password'])
             return user
         else:
-            return None
+            return False
 
     def get_user_name(self):
         return self._name
@@ -35,6 +35,6 @@ class UserAuthenticator(User):
 
 class AuthValidation:
     @staticmethod
-    def validate(email, password):
+    def Validate(email, password):
         user = UserAuthenticator.find_user(email, password)
-        return user.get_user_name() if user else None
+        return user.get_user_name() if user else False
