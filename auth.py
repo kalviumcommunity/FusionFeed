@@ -29,7 +29,7 @@ class ValidUser(User):
                              doc_data['email'], doc_data['password'])
             return user
         else:
-            return None
+            return False
 
     def getUserName(self):
         return self.name
