@@ -13,31 +13,31 @@ class User(ABC):
         self.email = email
         self.password = password
 
+    @abstractmethod
+    def getUserName(self):
+        pass
 
-class isValidUser:
+
+class ValidUser(User):
     @staticmethod
     def findUser(email, password):
         doc_data = Auth.find_one({"email": email, "password": password})
         if doc_data:
-            user = User(doc_data['_id'], doc_data['name'],
-                        doc_data['email'], doc_data['password'])
+            user = ValidUser(doc_data['_id'], doc_data['name'],
+                             doc_data['email'], doc_data['password'])
             return user
         else:
             return None
 
-
-class getName(ABC):
-    @staticmethod
-    @abstractmethod
-    def getUserName(user):
-        if user:
-            return user.name
-        else:
-            return None
+    def getUserName(self):
+        return self.name
 
 
 class AuthValidation:
     @staticmethod
     def Validate(email, password):
-        user = isValidUser.findUser(email, password)
-        return getName.getUserName(user)
+        user = ValidUser.findUser(email, password)
+        if user:
+            return user.getUserName()
+        else:
+            return None
