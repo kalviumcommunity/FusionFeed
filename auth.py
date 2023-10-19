@@ -37,7 +37,7 @@ class UserAuthenticator:
                         doc_data['email'], doc_data['password'])
             return user
         else:
-            return None
+            return False
 
 
 class UserNameGetter(ABC):
