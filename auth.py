@@ -1,11 +1,12 @@
 from pymongo import MongoClient
 import os
+from abc import ABC, abstractmethod
 
 MONGO = os.getenv('MONGO')
 Auth = MongoClient(MONGO).test["OOPs"]
 
 
-class User:
+class User(ABC):
     def __init__(self, _id, name, email, password):
         self._id = _id
         self.name = name
@@ -25,8 +26,9 @@ class isValidUser:
             return None
 
 
-class getName:
+class getName(ABC):
     @staticmethod
+    @abstractmethod
     def getUserName(user):
         if user:
             return user.name
