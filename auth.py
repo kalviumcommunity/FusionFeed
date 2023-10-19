@@ -9,35 +9,32 @@ Auth = MongoClient(MONGO).test["OOPs"]
 class User(ABC):
     def __init__(self, _id, name, email, password):
         self._id = _id
-        self.name = name
-        self.email = email
-        self.password = password
+        self._name = name
+        self._email = email
+        self._password = password
 
     @abstractmethod
-    def getUserName(self):
+    def get_user_name(self):
         pass
 
 
-class ValidUser(User):
+class UserAuthenticator(User):
     @staticmethod
-    def findUser(email, password):
+    def find_user(email, password):
         doc_data = Auth.find_one({"email": email, "password": password})
         if doc_data:
-            user = ValidUser(doc_data['_id'], doc_data['name'],
-                             doc_data['email'], doc_data['password'])
+            user = UserAuthenticator(doc_data['_id'], doc_data['name'],
+                                     doc_data['email'], doc_data['password'])
             return user
         else:
             return None
 
-    def getUserName(self):
-        return self.name
+    def get_user_name(self):
+        return self._name
 
 
 class AuthValidation:
     @staticmethod
-    def Validate(email, password):
-        user = ValidUser.findUser(email, password)
-        if user:
-            return user.getUserName()
-        else:
-            return None
+    def validate(email, password):
+        user = UserAuthenticator.find_user(email, password)
+        return user.get_user_name() if user else None
