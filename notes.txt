@@ -1,0 +1,47 @@
+How memory is managed in Python
+According to the Python memory management documentation, Python has a private heap that stores our program’s objects and data structures. Python memory manager takes care of the bulk of the memory management work and allows us to concentrate on our code.
+
+
+
+There are two types of memory allocation in Python, static and dynamic.
+
+
+1. static
+
+The stack data structure provides static memory allocation, meaning the variables are in the stack memory. Statically assigned variables, as the name implies, are permanent; this means that they must be allocated in advance and persist for the duration of the program.
+
+x = 20
+y = [] 
+z = "" 
+
+
+
+2. dynamic
+
+The dynamic memory allocation uses heap data structures in its implementation, implying that variables are in the heap memory. As the name suggests, dynamically allocated variables are not permanent and can be changed while a program is running.
+
+
+
+Python garbage collection
+
+
+
+Note: Python uses garbage collection to release memory blocks no longer in use.
+
+The Python garbage collector handles memory allocation and deallocation automatically in Python. Python developers have designed it to eliminate the need for manual garbage collection. Garbage collection in Python refers to the interpreter’s memory management process of freeing up unneeded and undesired memory for our applications.
+
+
+
+In Python, dynamic memory allocation is handled by the language itself and is not something you need to explicitly manage as you would in languages like C or C++. Python uses a mechanism called automatic memory management or garbage collection to handle memory allocation and deallocation. This means that Python takes care of allocating memory for objects you create and frees that memory when it is no longer needed.
+
+Here are a few key points to understand how memory allocation works in Python:
+
+Object Creation: When you create an object, whether it's a variable, list, dictionary, or any other data structure, Python automatically allocates memory to store the object and its data.
+
+Reference Counting: Python uses reference counting to keep track of how many references there are to each object. When an object's reference count drops to zero, it means the object is no longer in use, and Python's garbage collector can free the memory associated with that object.
+
+Garbage Collection: Python's garbage collector is responsible for reclaiming memory that is no longer being used by any part of your program. It identifies objects with a reference count of zero and releases the memory associated with those objects.
+
+Memory Management Libraries: Python has standard libraries like ctypes and cffi that allow you to work with external libraries written in languages like C and C++ that do require explicit memory allocation and deallocation.
+
+In general, you don't need to worry about manual memory allocation in Python, as the language takes care of most memory management tasks for you. However, it's essential to be aware of memory usage and potential memory leaks in your code. You can use tools like memory profilers and monitoring tools to identify and address memory-related issues when they arise.
