@@ -16,6 +16,7 @@ Blogs = db["Blog"]
 
 # Class for representing a blog post
 
+# array of objects to store the blog posts
 
 blog_posts = []
 
