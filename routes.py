@@ -1,29 +1,29 @@
-import os
-from pymongo import MongoClient
 from flask import Flask, request, jsonify
 from auth import AuthValidation
-
-app = Flask(__name__)
-blog_posts = []  # A list to store blog posts
-
-# MongoDB initialization
+from pymongo import MongoClient
+import os
+from abc import ABC, abstractmethod
 
 MONGO = os.getenv('MONGO')
 Auth = MongoClient(MONGO).test["OOPs"]
 
+app = Flask(__name__)
+blog_posts = []  # A list to store blog posts
 
-class Template:
+
+class DataHandler(ABC):
+    @abstractmethod
     def create_data(self, **data):
         pass
 
 
-class Document(Template):
+class DocumentHandler(DataHandler):
     def create_data(self, name, email, password):
         doc_data = {"name": name, "email": email, "password": password}
         return doc_data
 
 
-class BlogPost(Template):
+class BlogPostHandler(DataHandler):
     def create_data(self, title, content, author):
         post_data = {"title": title, "content": content, "author": author}
         return post_data
@@ -40,8 +40,8 @@ def create_document():
         if not (name and email and password):
             return jsonify({'error': 'Missing data'}), 400
 
-        document = Document()
-        doc_data = document.create_data(name, email, password)
+        doc_handler = DocumentHandler()
+        doc_data = doc_handler.create_data(name, email, password)
 
         result = Auth.insert_one(doc_data)
         return jsonify({'message': 'Document created', 'document_id': str(result.inserted_id)}), 201
@@ -72,8 +72,8 @@ def create_post():
         if not (title and content):
             return jsonify({'error': 'Missing title or content'}), 400
 
-        blog_post = BlogPost()
-        post_data = blog_post.create_data(title, content, author)
+        post_handler = BlogPostHandler()
+        post_data = post_handler.create_data(title, content, author)
 
         blog_posts.append(post_data)
 
