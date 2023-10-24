@@ -88,11 +88,9 @@ def create_post():
 @app.route('/posts', methods=['GET'])
 def get_posts():
     try:
-        posts = BlogPost.get_all()
-        return jsonify({'posts': posts}), 200
+        return jsonify({'posts': blog_posts}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 # Route for getting a single blog post by id
 
@@ -100,8 +98,12 @@ def get_posts():
 @app.route('/post/<id>', methods=['GET'])
 def get_post(id):
     try:
-        post = BlogPost.get_one(id)
-        return jsonify({'post': post}), 200
+        # Find the post with the given ID
+        post = next((post for post in blog_posts if post['id'] == id), None)
+        if post:
+            return jsonify({'post': post}), 200
+        else:
+            return jsonify({'error': 'Post not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -111,13 +113,21 @@ def get_post(id):
 @app.route('/post/<id>', methods=['PUT'])
 def update_post(id):
     try:
-        posttoUpdate = BlogPost.get_one(id)
         data = request.get_json()
         title = data.get('title')
         content = data.get('content')
-    # update the post with the new data
-        posttoUpdate.update(title, content)
-        return jsonify({'message': 'Blog post updated', 'post': posttoUpdate}), 200
+
+        # Find the post with the given ID
+        post = next((post for post in blog_posts if post['id'] == id), None)
+
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+
+        # Update the post with the new data
+        post['title'] = title
+        post['content'] = content
+        return jsonify({'message': 'Blog post updated', 'post': post}), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -127,9 +137,16 @@ def update_post(id):
 @app.route('/post/<id>', methods=['DELETE'])
 def delete_post(id):
     try:
-        posttoDelete = BlogPost.get_one(id)
-        posttoDelete.delete()
-        return jsonify({'message': 'Blog post deleted', 'post': posttoDelete}), 200
+        # Find the index of the post with the given ID
+        index = next((i for i, post in enumerate(
+            blog_posts) if post['id'] == id), None)
+
+        if index is not None:
+            deleted_post = blog_posts.pop(index)
+            return jsonify({'message': 'Blog post deleted', 'post': deleted_post}), 200
+        else:
+            return jsonify({'error': 'Post not found'}), 404
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
