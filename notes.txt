@@ -1,3 +1,4 @@
+Explaination 
 It seems like you want to implement the concept of interfaces in your Python code. Python doesn't have built-in support for interfaces like some other object-oriented programming languages (e.g., Java), but you can achieve similar functionality using abstract base classes (ABC) and the abc module.
 
 Here's how you can refactor your code to incorporate the concept of interfaces:
