@@ -1,0 +1,7 @@
+In Python, memory management revolves around a private heap that stores program objects and data structures. It employs two memory allocation methods: static and dynamic. Static allocation, typically found in stack memory, involves permanent variables allocated in advance, like integers or empty lists. Dynamic allocation, implemented in heap memory, allows variables to change during program execution.
+
+Python's memory management also includes automatic garbage collection. The Python garbage collector handles memory allocation and deallocation, eliminating the need for manual memory management. It automatically allocates memory for objects and releases it when no longer in use.
+
+Key aspects of Python's memory management include object creation, reference counting, and garbage collection. Objects are allocated memory when created, reference counting tracks object references, and the garbage collector frees memory from objects with a reference count of zero.
+
+While Python abstracts most memory management, it's crucial to monitor memory usage and address potential memory leaks. Tools like memory profilers can help identify and resolve memory-related issues, ensuring efficient and robust Python applications.
