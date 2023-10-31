@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 MONGO = os.getenv('MONGO')
 Auth = MongoClient(MONGO).test["OOPs"]
 
+# static Validation class for validating the user
+
 
 class User(ABC):
     def __init__(self, _id, name, email, password):
