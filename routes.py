@@ -1,23 +1,32 @@
-from flask import request, jsonify
-from main import app,  Auth, BlogPost, blog_posts
+from flask import Flask, request, jsonify
 from auth import AuthValidation
+from pymongo import MongoClient
+import os
+from abc import ABC, abstractmethod
 
-# Classes and Objects
+MONGO = os.getenv('MONGO')
+Auth = MongoClient(MONGO).test["OOPs"]
+
+app = Flask(__name__)
+blog_posts = []  # A list to store blog posts
 
 
-class Document:
-    # Constructor
-    def __init__(self, name, email, password):
-        self.name = name
-        self.email = email
-        self.password = password
-        print(f"Document object created for {self.name}")
+class DataHandler(ABC):
+    @abstractmethod
+    def create_data(self, **data):
+        pass
 
-    # Destructor
-    def __del__(self):
-        print(f"Document object destroyed for {self.name}")
 
-# Route for creating a new user
+class DocumentHandler(DataHandler):
+    def create_data(self, name, email, password):
+        doc_data = {"name": name, "email": email, "password": password}
+        return doc_data
+
+
+class BlogPostHandler(DataHandler):
+    def create_data(self, title, content, author):
+        post_data = {"title": title, "content": content, "author": author}
+        return post_data
 
 
 @app.route('/signup', methods=['POST'])
@@ -31,25 +40,18 @@ def create_document():
         if not (name and email and password):
             return jsonify({'error': 'Missing data'}), 400
 
-        # Create an instance of the Document class
-        new_doc = Document(name, email, password)
-        doc_data = {"name": new_doc.name,
-                    "email": new_doc.email,
-                    "password": new_doc.password}
+        doc_handler = DocumentHandler()
+        doc_data = doc_handler.create_data(name, email, password)
 
-        # Insert the document into the collection
         result = Auth.insert_one(doc_data)
         return jsonify({'message': 'Document created', 'document_id': str(result.inserted_id)}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Route for creating a new blog post
-
 
 @app.route('/blog-post', methods=['POST'])
 def create_post():
-
     try:
         data = request.get_json()
         email = request.headers.get('email')
@@ -58,7 +60,6 @@ def create_post():
         if not (email and password):
             return jsonify({'error': 'Missing email or password headers'}), 400
 
-        # Check if the email and password match with the ones stored in the database
         doc_data = AuthValidation.Validate(email, password)
 
         if not doc_data:
@@ -71,48 +72,83 @@ def create_post():
         if not (title and content):
             return jsonify({'error': 'Missing title or content'}), 400
 
-        # Create an instance of the BlogPost class
-        new_post = BlogPost(title, content, author)
+        post_handler = BlogPostHandler()
+        post_data = post_handler.create_data(title, content, author)
 
-        # Add it to the array
-        blog_posts.append(new_post)
-
-        # Send the post to the database
-        post_data = new_post.send()
+        blog_posts.append(post_data)
 
         return jsonify({'message': 'Blog post created', 'post': post_data}), 201
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
 # Route for getting all blog posts
 
 
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    pass
+    try:
+        return jsonify({'posts': blog_posts}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Route for getting a single blog post by id
 
 
 @app.route('/post/<id>', methods=['GET'])
 def get_post(id):
-    pass
+    try:
+        # Find the post with the given ID
+        post = next((post for post in blog_posts if post['id'] == id), None)
+        if post:
+            return jsonify({'post': post}), 200
+        else:
+            return jsonify({'error': 'Post not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Route for updating a single blog post by id
 
 
 @app.route('/post/<id>', methods=['PUT'])
 def update_post(id):
-    pass
+    try:
+        data = request.get_json()
+        title = data.get('title')
+        content = data.get('content')
+
+        # Find the post with the given ID
+        post = next((post for post in blog_posts if post['id'] == id), None)
+
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+
+        # Update the post with the new data
+        post['title'] = title
+        post['content'] = content
+        return jsonify({'message': 'Blog post updated', 'post': post}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Route for deleting a single blog post by id
 
 
 @app.route('/post/<id>', methods=['DELETE'])
 def delete_post(id):
-    pass
+    try:
+        # Find the index of the post with the given ID
+        index = next((i for i, post in enumerate(
+            blog_posts) if post['id'] == id), None)
+
+        if index is not None:
+            deleted_post = blog_posts.pop(index)
+            return jsonify({'message': 'Blog post deleted', 'post': deleted_post}), 200
+        else:
+            return jsonify({'error': 'Post not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':
