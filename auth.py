@@ -55,3 +55,4 @@ class UserNameGetter(ABC):
     def validate(email, password):
         user = UserAuthenticator.find_user(email, password)
         return UserNameGetter.get_user_name(user)
+
