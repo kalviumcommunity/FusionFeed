@@ -91,28 +91,51 @@ def create_post():
 
 @app.route('/posts', methods=['GET'])
 def get_posts():
-    pass
+    try:
+        posts = BlogPost.get_all()
+        return jsonify({'posts': posts}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 # Route for getting a single blog post by id
 
 
 @app.route('/post/<id>', methods=['GET'])
 def get_post(id):
-    pass
+    try:
+        post = BlogPost.get_one(id)
+        return jsonify({'post': post}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Route for updating a single blog post by id
 
 
 @app.route('/post/<id>', methods=['PUT'])
 def update_post(id):
-    pass
+    try:
+        posttoUpdate = BlogPost.get_one(id)
+        data = request.get_json()
+        title = data.get('title')
+        content = data.get('content')
+    # update the post with the new data
+        posttoUpdate.update(title, content)
+        return jsonify({'message': 'Blog post updated', 'post': posttoUpdate}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Route for deleting a single blog post by id
 
 
 @app.route('/post/<id>', methods=['DELETE'])
 def delete_post(id):
-    pass
+    try:
+        posttoDelete = BlogPost.get_one(id)
+        posttoDelete.delete()
+        return jsonify({'message': 'Blog post deleted', 'post': posttoDelete}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':
