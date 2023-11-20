@@ -1,25 +1,5 @@
-In the code you provided for your Flask-based project, I see some design principles being used, although the code could benefit from further refactoring to adhere more closely to the SOLID principles:
-
-Single Responsibility Principle (SRP):
-
-The Document and BlogPost classes appear to follow the SRP as they handle specific responsibilities related to their respective data types. Document handles creating and managing user documents, and BlogPost manages blog post data.
-Dependency Inversion Principle (DIP):
-
-Your code shows some usage of dependency inversion by utilizing an interface-like concept. The AuthValidation class and UserAuthenticator class serve as abstractions, allowing you to change the authentication mechanism without altering the high-level code that uses these abstractions.
-Modularity and Encapsulation:
-
-Your code is organized into separate files (modules), which promotes modularity. Each file has a specific purpose, such as authentication, the main application, and routes.
-
-
-However, there's room for improvement in terms of SOLID principles:
-
-Open-Closed Principle (OCP):
-
-To better adhere to the OCP, you could design your classes and routes to be more open for extension. For instance, you could introduce interfaces or base classes for different data types (like Document and BlogPost) to enable easy addition of new data types in the future.
-Liskov Substitution Principle (LSP):
-
-You could enhance LSP by ensuring that derived classes or data objects (e.g., Document and BlogPost) are true subtypes of a common base class or interface that specifies their behavior. This way, you ensure that they can be used interchangeably in the same context.
-Interface Segregation Principle (ISP):
-
-Your code does not explicitly demonstrate ISP; however, you could follow it by creating more specific interfaces for different responsibilities. For example, you could define separate interfaces for document management and blog post management, ensuring that classes implement only the methods relevant to their use.
-
+Whats SRP ?
+Technical definition?
+Benefits of SRP?
+Disadvantages?
+Conclusion?
