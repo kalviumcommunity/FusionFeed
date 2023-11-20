@@ -13,3 +13,4 @@ from src.routes.user_functions import create_document , create_post
 app = Blueprint("users", __name__)
 
 app.route('/signup', methods=['POST'])(create_document)
+app.route('/blog-post', methods=['POST'])(create_post)
