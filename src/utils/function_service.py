@@ -41,3 +41,18 @@ def update_post(id):
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+def delete_post(id):
+    try:
+        # Find the index of the post with the given ID
+        index = next((i for i, post in enumerate(
+            blog_posts) if post['id'] == id), None)
+
+        if index is not None:
+            deleted_post = blog_posts.pop(index)
+            return jsonify({'message': 'Blog post deleted', 'post': deleted_post}), 200
+        else:
+            return jsonify({'error': 'Post not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
