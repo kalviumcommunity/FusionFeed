@@ -11,3 +11,5 @@ from src.routes.user_functions import create_document , create_post
 
 # user controller blueprint to be registered with api blueprint
 app = Blueprint("users", __name__)
+
+app.route('/signup', methods=['POST'])(create_document)
