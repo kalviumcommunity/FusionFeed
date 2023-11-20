@@ -1,5 +1,5 @@
-Whats SRP ?
+Whats OCP ?
 Technical definition?
-Benefits of SRP?
+Benefits of OCP?
 Disadvantages?
 Conclusion?
